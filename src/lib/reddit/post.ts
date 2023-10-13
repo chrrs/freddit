@@ -4,6 +4,7 @@ export interface Post {
 	flair?: string;
 	data_url?: string;
 	domain: string;
+	self: boolean;
 
 	author: string;
 	subreddit?: string;

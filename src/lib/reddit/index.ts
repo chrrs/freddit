@@ -37,6 +37,7 @@ export function extractPosts(siteTable: Cheerio<Element>): Post[] {
 				flair: $('.top-matter > p.title > span.linkflairlabel').text(),
 				data_url: el.attribs['data-url'],
 				domain: el.attribs['data-domain'],
+				self: el.attribs['class'].includes(' self'),
 
 				author: el.attribs['data-author'] ?? 'ghost',
 				subreddit: el.attribs['data-subreddit'],

@@ -38,9 +38,13 @@ const { post, showSubreddit } = Astro.props;
 			{post.flair && <span class="flair">{post.flair}</span>}
 			<span class="title">{post.title}</span>
 		</a>
-		<p class="link">
-			<a href={post.data_url}>{post.data_url}</a>
-		</p>
+		{
+			!post.self && (
+				<p class="link">
+					<a href={post.data_url}>{post.data_url}</a>
+				</p>
+			)
+		}
 	</div>
 </div>
 

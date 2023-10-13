@@ -16,7 +16,7 @@ const home = await getHomePagePosts();
 
 <div class="container">
 	<div id="posts">
-		{home.map((post) => <Post post={post} />)}
+		{home.map((post) => <Post showSubreddit post={post} />)}
 	</div>
 </div>
 

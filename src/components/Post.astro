@@ -4,18 +4,26 @@ import { formatDistanceToNowStrict, formatRelative } from 'date-fns';
 
 interface Props {
 	post: Post;
+	showSubreddit?: boolean;
 }
 
-const { post } = Astro.props;
+const { post, showSubreddit } = Astro.props;
 ---
 
-<div class="root">
+<div class:list={['root', { nsfw: post.nsfw }]}>
 	<div class="sidebar">
 		{post.score.toLocaleString('en-US')}
 	</div>
 	<div class="content">
 		<h2 class="subtitle">
-			<a href={`/r/${post.subreddit}`} class="subreddit">r/{post.subreddit}</a>
+			{post.nsfw && <span class="nsfw">NSFW</span>}
+			{
+				showSubreddit && (
+					<a href={`/r/${post.subreddit}`} class="subreddit">
+						r/{post.subreddit}
+					</a>
+				)
+			}
 			<span title={formatRelative(post.timestamp, new Date())}>
 				{formatDistanceToNowStrict(post.timestamp, { addSuffix: true })}
 			</span>
@@ -42,6 +50,10 @@ const { post } = Astro.props;
 		@apply bg-white rounded overflow-hidden;
 		@apply border-gray-100 border;
 
+		&.nsfw {
+			@apply border-red-300;
+		}
+
 		.sidebar {
 			@apply flex-none bg-gray-100 pt-2 w-16;
 			@apply text-gray-500 text-sm font-semibold text-center;
@@ -52,6 +64,10 @@ const { post } = Astro.props;
 
 			.subtitle {
 				@apply text-xs text-gray-500;
+
+				.nsfw {
+					@apply font-bold text-red-600 mr-1;
+				}
 
 				a {
 					@apply hover:underline;
@@ -74,9 +90,12 @@ const { post } = Astro.props;
 			}
 
 			.link {
-				@apply mt-1;
+				@apply mt-1 text-xs;
 				@apply whitespace-nowrap text-ellipsis overflow-hidden;
-				@apply text-blue-800 hover:underline text-xs;
+
+				a {
+					@apply text-blue-800 hover:underline;
+				}
 			}
 		}
 	}

@@ -1,0 +1,31 @@
+---
+import { getHomePagePosts } from '$lib/reddit';
+import Post from '$components/Post.astro';
+
+const home = await getHomePagePosts();
+---
+
+<head>
+	<meta charset="utf-8" />
+	<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+	<meta name="viewport" content="width=device-width" />
+	<meta name="generator" content={Astro.generator} />
+
+	<title>Freddit</title>
+</head>
+
+<div class="container">
+	<div id="posts">
+		{home.map((post) => <Post post={post} />)}
+	</div>
+</div>
+
+<style lang="scss">
+	body {
+		@apply bg-gray-200;
+	}
+
+	.container {
+		@apply mx-auto max-w-3xl;
+	}
+</style>

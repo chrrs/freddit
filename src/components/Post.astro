@@ -1,0 +1,83 @@
+---
+import { type Post } from '$lib/reddit/post';
+import { formatDistanceToNowStrict, formatRelative } from 'date-fns';
+
+interface Props {
+	post: Post;
+}
+
+const { post } = Astro.props;
+---
+
+<div class="root">
+	<div class="sidebar">
+		{post.score.toLocaleString('en-US')}
+	</div>
+	<div class="content">
+		<h2 class="subtitle">
+			<a href={`/r/${post.subreddit}`} class="subreddit">r/{post.subreddit}</a>
+			<span title={formatRelative(post.timestamp, new Date())}>
+				{formatDistanceToNowStrict(post.timestamp, { addSuffix: true })}
+			</span>
+			 &bull;
+			<a href={`/u/${post.author}`}>u/{post.author}</a>
+			 &bull;
+			<a href={post.comments_url}>{post.comments.toLocaleString('en-US')} comments</a>
+			 &bull;
+			<span>{post.domain}</span>
+		</h2>
+		<a class="title" href={post.comments_url}>
+			{post.flair && <span class="flair">{post.flair}</span>}
+			<span class="title">{post.title}</span>
+		</a>
+		<p class="link">
+			<a href={post.data_url}>{post.data_url}</a>
+		</p>
+	</div>
+</div>
+
+<style lang="scss">
+	.root {
+		@apply flex items-stretch mb-2;
+		@apply bg-white rounded overflow-hidden;
+		@apply border-gray-100 border;
+
+		.sidebar {
+			@apply flex-none bg-gray-100 pt-2 w-16;
+			@apply text-gray-500 text-sm font-semibold text-center;
+		}
+
+		.content {
+			@apply px-2 py-1 min-w-0;
+
+			.subtitle {
+				@apply text-xs text-gray-500;
+
+				a {
+					@apply hover:underline;
+				}
+
+				.subreddit {
+					@apply font-bold mr-1;
+				}
+			}
+
+			.title {
+				.flair {
+					@apply inline-block px-1 bg-gray-100 mr-2;
+					@apply text-sm text-gray-800;
+				}
+
+				.title {
+					@apply font-semibold;
+				}
+			}
+
+			.link {
+				@apply mt-1;
+				@apply whitespace-nowrap text-ellipsis overflow-hidden;
+				@apply text-blue-800 hover:underline text-xs;
+			}
+		}
+	}
+</style>

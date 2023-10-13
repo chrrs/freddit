@@ -1,8 +1,8 @@
 ---
-import { getHomePagePosts } from '$lib/reddit';
-import Post from '$components/Post.astro';
+import PostList from '$components/PostList.astro';
+import { getHomePage } from '$lib/reddit';
 
-const home = await getHomePagePosts();
+const { posts } = await getHomePage();
 ---
 
 <head>
@@ -15,9 +15,7 @@ const home = await getHomePagePosts();
 </head>
 
 <div class="container">
-	<div id="posts">
-		{home.map((post) => <Post showSubreddit post={post} />)}
-	</div>
+	<PostList posts={posts} />
 </div>
 
 <style lang="scss">

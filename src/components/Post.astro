@@ -10,7 +10,7 @@ interface Props {
 const { post, showSubreddit } = Astro.props;
 ---
 
-<div class:list={['root', { nsfw: post.nsfw }]}>
+<div class:list={['root', { nsfw: post.nsfw, sticky: post.sticky }]}>
 	<div class="sidebar">
 		{post.score.toLocaleString('en-US')}
 	</div>
@@ -56,6 +56,14 @@ const { post, showSubreddit } = Astro.props;
 
 		&.nsfw {
 			@apply border-red-300;
+		}
+
+		&.sticky {
+			@apply border-green-500;
+
+			.content .title {
+				@apply text-green-700;
+			}
 		}
 
 		.sidebar {

@@ -1,17 +1,24 @@
 ---
+import PostList from '$components/PostList.astro';
 import { getSubreddit } from '$lib/reddit/subreddit';
-import Post from '$components/Post.astro';
 
 const { subreddit } = Astro.params;
 const { posts, name } = await getSubreddit(subreddit!!);
 ---
 
+<head>
+	<meta charset="utf-8" />
+	<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+	<meta name="viewport" content="width=device-width" />
+	<meta name="generator" content={Astro.generator} />
+
+	<title>Freddit</title>
+</head>
+
 <div class="container">
 	<h1>r/{name}</h1>
 
-	<div id="posts">
-		{posts.map((post) => <Post post={post} />)}
-	</div>
+	<PostList posts={posts} />
 </div>
 
 <style lang="scss">

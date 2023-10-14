@@ -1,22 +1,9 @@
-import { extractPosts, type Post } from './post';
 import { load } from 'cheerio';
-
-export const BASE_URL = 'https://old.reddit.com';
-
-export async function fetchBase(path: string = ''): Promise<string> {
-	return await fetch(BASE_URL + path, {
-		headers: {
-			'x-over18': 'true',
-			Cookie: 'over18=1',
-		},
-	}).then((res) => res.text());
-}
+import type { Post } from './types';
+import { extractPosts, fetchBase } from './util';
 
 export interface HomePage {
 	posts: Post[];
-
-	before?: string;
-	after?: string;
 }
 
 export async function getHomePage(): Promise<HomePage> {

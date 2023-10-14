@@ -1,6 +1,6 @@
 import { load } from 'cheerio';
-import { fetchBase } from '.';
-import { extractPosts, type Post } from './post';
+import type { Post } from './types';
+import { extractPosts, fetchBase } from './util';
 
 export interface Subreddit {
 	name: string;

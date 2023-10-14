@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Post } from '~/lib/reddit/types';
 	import { formatRFC7231, formatDistanceToNowStrict } from 'date-fns';
+	import AuthorName from './AuthorName.svelte';
 
 	export let showSubreddit = false;
 	export let post: Post;
@@ -23,7 +24,7 @@
 			</span>
 			{' • '}
 			<!-- FIXME: Add author name component -->
-			<a href={`/u/${post.author.name}`}>u/{post.author.name}</a>
+			<a href={`/u/${post.author.name}`}><AuthorName author={post.author} /></a>
 			{' • '}
 			<a href={post.post_url}>{post.comments.toLocaleString('en-US')} comments</a>
 			{' • '}

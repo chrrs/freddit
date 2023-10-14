@@ -39,7 +39,12 @@ export function extractPosts(siteTable: Cheerio<Element>): Post[] {
 
 				author: {
 					name: el.attribs['data-author'] ?? 'ghost',
-					// FIXME: Author Role
+					role:
+						$('.author.admin').length > 0
+							? 'admin'
+							: $('.author.moderator').length > 0
+							? 'moderator'
+							: undefined,
 				},
 				subreddit: el.attribs['data-subreddit'],
 				timestamp: Number(el.attribs['data-timestamp']),

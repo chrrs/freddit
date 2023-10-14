@@ -6,7 +6,7 @@ export const BASE_URL = 'https://old.reddit.com';
 export async function fetchBase(path: string = ''): Promise<string> {
 	return await fetch(BASE_URL + path, {
 		headers: {
-			'x-over18': 'true',
+			Accept: 'text/html',
 			Cookie: 'over18=1',
 		},
 	}).then((res) => res.text());
@@ -14,6 +14,8 @@ export async function fetchBase(path: string = ''): Promise<string> {
 
 export function extractPosts(siteTable: Cheerio<Element>): Post[] {
 	// FIXME: Detect when there are no posts.
+	// FIXME: Detect private subreddits
+	// FIXME: Detect when subreddit does not exist (currently goes to r/subreddits)
 
 	return siteTable
 		.children('.thing:not(.promoted)')

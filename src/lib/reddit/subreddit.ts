@@ -4,6 +4,7 @@ import { extractPosts, fetchBase } from './util';
 
 export interface Subreddit {
 	name: string;
+	multi: boolean;
 	posts: Post[];
 }
 
@@ -19,6 +20,7 @@ export async function getSubreddit(subreddit: string): Promise<Subreddit> {
 
 	return {
 		name: $('#header .redditname').text(),
+		multi: subreddit.includes('+'),
 		posts: extractPosts(siteTable),
 	};
 }

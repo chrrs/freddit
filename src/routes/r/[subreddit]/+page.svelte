@@ -2,12 +2,14 @@
 	import Post from '~/components/Post.svelte';
 
 	export let data;
+
+	$: showSubreddit = ['popular', 'all'].includes(data.name.toLowerCase()) || data.multi;
 </script>
 
 <div class="wrapper">
 	<h1>r/{data.name}</h1>
 	{#each data.posts as post (post.id)}
-		<Post {post} />
+		<Post {showSubreddit} {post} />
 	{/each}
 </div>
 

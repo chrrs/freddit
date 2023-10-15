@@ -57,7 +57,7 @@ export function extractPost(el: Element): Post {
 		domain: el.attribs['data-domain'],
 
 		author: {
-			name: el.attribs['data-author'] ?? 'ghost',
+			name: el.attribs['data-author'] ?? '[deleted]',
 			role:
 				$('.author.admin').length > 0
 					? 'admin'

@@ -4,6 +4,8 @@
 	import SortSelector from '~/components/SortSelector.svelte';
 
 	export let data;
+
+	$: timeFrame = $page.url.searchParams.get('t') ?? 'day';
 </script>
 
 <svelte:head>
@@ -11,7 +13,7 @@
 </svelte:head>
 
 <main class="container">
-	<SortSelector current={$page.params.sort ?? 'hot'} urlPrefix="" />
+	<SortSelector current={$page.params.sort ?? 'hot'} currentTimeFrame={timeFrame} urlPrefix="" />
 	{#each data.posts as post (post.id)}
 		<Post showSubreddit {post} />
 	{/each}

@@ -6,6 +6,7 @@
 
 	export let data;
 
+	$: timeFrame = $page.url.searchParams.get('t') ?? 'day';
 	$: showSubreddit = ['popular', 'all'].includes(data.name.toLowerCase()) || data.multi;
 </script>
 
@@ -25,7 +26,11 @@
 			<b>{data.online.toLocaleString('en-US')}</b> online
 		</h2>
 
-		<SortSelector current={$page.params.sort ?? 'hot'} urlPrefix="/r/{$page.params.subreddit}" />
+		<SortSelector
+			current={$page.params.sort ?? 'hot'}
+			currentTimeFrame={timeFrame}
+			urlPrefix="/r/{$page.params.subreddit}"
+		/>
 		{#each data.posts as post (post.id)}
 			<Post {showSubreddit} {post} />
 		{/each}

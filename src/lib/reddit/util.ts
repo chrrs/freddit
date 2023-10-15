@@ -23,12 +23,16 @@ export function extractPosts(siteTable: Cheerio<Element>): Post[] {
 		.map((el) => {
 			const $ = load(el);
 
-			// FIXME: v.reddit: https://v.redd.it/q8t2hkexxztb1/HLSPlaylist.m3u8 (link + /HLSPlaylist.m3u8)
+			const url = el.attribs['data-url'];
 			let data_url: DataUrl;
 			if (el.attribs['class'].includes(' self')) {
 				data_url = { type: 'self' };
+			} else if (['jpg', 'jpeg', 'png', 'webp'].some((ext) => url.endsWith(ext))) {
+				data_url = { type: 'image', url };
+			} else if (url.startsWith('https://v.redd.it/')) {
+				data_url = { type: 'video', url: `${url}/HLSPlaylist.m3u8` };
 			} else {
-				data_url = { type: 'url', url: el.attribs['data-url'] };
+				data_url = { type: 'url', url };
 			}
 
 			return {

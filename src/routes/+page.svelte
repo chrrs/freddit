@@ -16,6 +16,6 @@
 	}
 
 	.wrapper {
-		@apply mx-auto max-w-3xl px-2;
+		@apply mx-auto max-w-2xl px-2;
 	}
 </style>

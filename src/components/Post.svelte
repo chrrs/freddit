@@ -2,6 +2,7 @@
 	import type { Post } from '~/lib/reddit/types';
 	import { formatRFC7231, formatDistanceToNowStrict } from 'date-fns';
 	import AuthorName from './AuthorName.svelte';
+	import HlsPlayer from './HlsPlayer.svelte';
 
 	export let showSubreddit = false;
 	export let post: Post;
@@ -36,10 +37,19 @@
 			{/if}
 			<span class="main-title">{post.title}</span>
 		</a>
+
+		<!-- FIXME: Decide if we want 'card' style media or something smaller.. -->
 		{#if post.data_url.type === 'url'}
+			<div class="content-spacer" />
 			<p class="link">
 				<a href={post.data_url.url}>{post.data_url.url}</a>
 			</p>
+		{:else if post.data_url.type === 'image'}
+			<div class="content-spacer" />
+			<img class="image" src={post.data_url.url} alt={post.title} />
+		{:else if post.data_url.type === 'video'}
+			<div class="content-spacer" />
+			<HlsPlayer src={post.data_url.url} />
 		{/if}
 	</div>
 </div>
@@ -65,7 +75,7 @@
 	}
 
 	.content {
-		@apply px-2 py-1 min-w-0;
+		@apply flex-1 px-2 py-1 min-w-0;
 	}
 
 	.subtitle {
@@ -97,12 +107,21 @@
 		@apply font-semibold;
 	}
 
+	.content-spacer {
+		@apply h-1;
+	}
+
 	.link {
-		@apply mt-1 text-xs;
+		@apply text-xs;
 		@apply whitespace-nowrap text-ellipsis overflow-hidden;
 	}
 
 	.link a {
 		@apply text-blue-800 hover:underline;
+	}
+
+	.image {
+		@apply w-full aspect-video;
+		@apply object-contain object-center;
 	}
 </style>

@@ -56,7 +56,12 @@
 		{:else if post.data_url.type === 'embed'}
 			<div class="content-spacer" />
 			{#if loadEmbed}
-				<iframe class="media" src={post.data_url.embed_url} title={post.title} />
+				<iframe
+					class="media"
+					allow="fullscreen;"
+					src={post.data_url.embed_url}
+					title={post.title}
+				/>
 			{:else}
 				<div class="embed-warning">
 					<button on:click={() => (loadEmbed = true)}>Load Embed</button>

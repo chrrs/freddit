@@ -44,6 +44,18 @@ export function extractPost(el: Element): Post {
 			embed_url: url.replace('https://v3.redgifs.com/watch', 'https://www.redgifs.com/ifr'),
 			original_url: url,
 		};
+	} else if (url.startsWith('https://www.youtube.com/watch?v=')) {
+		data_url = {
+			type: 'embed',
+			embed_url: url.replace('https://www.youtube.com/watch?v=', 'https://www.youtube.com/embed/'),
+			original_url: url,
+		};
+	} else if (url.startsWith('https://youtu.be/')) {
+		data_url = {
+			type: 'embed',
+			embed_url: url.replace('https://youtu.be/', 'https://www.youtube.com/embed/'),
+			original_url: url,
+		};
 	} else {
 		data_url = { type: 'url', url };
 	}

@@ -1,7 +1,7 @@
-import { defineConfig, presetWind, transformerDirectives } from 'unocss';
+import { defineConfig, presetIcons, presetWind, transformerDirectives } from 'unocss';
 
 export default defineConfig({
 	blocklist: ['sticky', 'container'],
-	presets: [presetWind()],
+	presets: [presetWind(), presetIcons()],
 	transformers: [transformerDirectives()],
 });

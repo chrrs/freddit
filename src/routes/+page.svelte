@@ -4,18 +4,14 @@
 	export let data;
 </script>
 
-<div class="wrapper">
+<main class="container">
 	{#each data.posts as post (post.id)}
 		<Post showSubreddit {post} />
 	{/each}
-</div>
+</main>
 
 <style>
-	:global(html) {
-		@apply bg-gray-200;
-	}
-
-	.wrapper {
-		@apply mx-auto max-w-2xl px-2;
+	.container {
+		@apply mt-4;
 	}
 </style>

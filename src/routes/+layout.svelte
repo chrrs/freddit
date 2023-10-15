@@ -4,6 +4,7 @@
 
 	import NProgress from 'nprogress';
 	import { navigating } from '$app/stores';
+	import Header from '~/components/Header.svelte';
 
 	NProgress.configure({
 		minimum: 0.16,
@@ -16,4 +17,16 @@
 	}
 </script>
 
+<Header />
+
 <slot />
+
+<style>
+	:global(html) {
+		@apply bg-gray-200;
+	}
+
+	:global(.container) {
+		@apply mx-auto max-w-2xl px-2;
+	}
+</style>

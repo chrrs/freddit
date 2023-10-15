@@ -6,19 +6,14 @@
 	$: showSubreddit = ['popular', 'all'].includes(data.name.toLowerCase()) || data.multi;
 </script>
 
-<div class="wrapper">
-	<h1>r/{data.name}</h1>
+<main class="container">
 	{#each data.posts as post (post.id)}
 		<Post {showSubreddit} {post} />
 	{/each}
-</div>
+</main>
 
 <style>
-	:global(html) {
-		@apply bg-gray-200;
-	}
-
-	.wrapper {
-		@apply mx-auto max-w-3xl px-2;
+	.container {
+		@apply mt-4;
 	}
 </style>

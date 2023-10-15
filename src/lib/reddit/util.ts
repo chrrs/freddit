@@ -17,51 +17,50 @@ export function extractPosts(siteTable: Cheerio<Element>): Post[] {
 	// FIXME: Detect private subreddits
 	// FIXME: Detect when subreddit does not exist (currently goes to r/subreddits)
 
-	return siteTable
-		.children('.thing:not(.promoted)')
-		.toArray()
-		.map((el) => {
-			const $ = load(el);
+	return siteTable.children('.thing:not(.promoted)').toArray().map(extractPost);
+}
 
-			const url = el.attribs['data-url'];
-			let data_url: DataUrl;
-			if (el.attribs['class'].includes(' self')) {
-				data_url = { type: 'self' };
-			} else if (['jpg', 'jpeg', 'png', 'webp'].some((ext) => url.endsWith(ext))) {
-				data_url = { type: 'image', url };
-			} else if (url.startsWith('https://v.redd.it/')) {
-				data_url = { type: 'video', url: `${url}/HLSPlaylist.m3u8` };
-			} else {
-				data_url = { type: 'url', url };
-			}
+export function extractPost(el: Element): Post {
+	const $ = load(el);
 
-			return {
-				id: el.attribs['data-fullname'] ?? `post-${el.attribs['data-timestamp']}`,
-				title: $('.top-matter > p.title > a.title').text(),
-				flair: $('.top-matter > p.title > span.linkflairlabel').text(),
+	const url = el.attribs['data-url'];
+	let data_url: DataUrl;
+	if (el.attribs['class'].includes(' self')) {
+		data_url = { type: 'self' };
+	} else if (['jpg', 'jpeg', 'png', 'webp'].some((ext) => url.endsWith(ext))) {
+		data_url = { type: 'image', url };
+	} else if (url.startsWith('https://v.redd.it/')) {
+		data_url = { type: 'video', url: `${url}/HLSPlaylist.m3u8` };
+	} else {
+		data_url = { type: 'url', url };
+	}
 
-				data_url,
-				domain: el.attribs['data-domain'],
+	return {
+		id: el.attribs['data-fullname'] ?? `post-${el.attribs['data-timestamp']}`,
+		title: $('.top-matter > p.title > a.title').text(),
+		flair: $('.top-matter > p.title > span.linkflairlabel').text(),
 
-				author: {
-					name: el.attribs['data-author'] ?? 'ghost',
-					role:
-						$('.author.admin').length > 0
-							? 'admin'
-							: $('.author.moderator').length > 0
-							? 'moderator'
-							: undefined,
-				},
-				subreddit: el.attribs['data-subreddit'],
-				timestamp: Number(el.attribs['data-timestamp']),
+		data_url,
+		domain: el.attribs['data-domain'],
 
-				nsfw: el.attribs['data-nsfw'] === 'true',
-				spoiler: el.attribs['data-spoiler'] === 'true',
-				sticky: el.attribs['class'].includes(' stickied'),
+		author: {
+			name: el.attribs['data-author'] ?? 'ghost',
+			role:
+				$('.author.admin').length > 0
+					? 'admin'
+					: $('.author.moderator').length > 0
+					? 'moderator'
+					: undefined,
+		},
+		subreddit: el.attribs['data-subreddit'],
+		timestamp: Number(el.attribs['data-timestamp']),
 
-				post_url: el.attribs['data-permalink'] ?? '/',
-				comments: Number(el.attribs['data-comments-count']),
-				score: Number(el.attribs['data-score']),
-			};
-		});
+		nsfw: el.attribs['data-nsfw'] === 'true',
+		spoiler: el.attribs['data-spoiler'] === 'true',
+		sticky: el.attribs['class'].includes(' stickied'),
+
+		post_url: el.attribs['data-permalink'] ?? '/',
+		comments: Number(el.attribs['data-comments-count']),
+		score: Number(el.attribs['data-score']),
+	};
 }

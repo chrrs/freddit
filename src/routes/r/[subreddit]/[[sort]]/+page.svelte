@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import ErrorMessage from '~/components/ErrorMessage.svelte';
 	import Post from '~/components/Post.svelte';
+	import SortSelector from '~/components/SortSelector.svelte';
 
 	export let data;
 
@@ -23,6 +25,7 @@
 			<b>{data.online.toLocaleString('en-US')}</b> online
 		</h2>
 
+		<SortSelector current={$page.params.sort ?? 'hot'} urlPrefix="/r/{$page.params.subreddit}" />
 		{#each data.posts as post (post.id)}
 			<Post {showSubreddit} {post} />
 		{/each}

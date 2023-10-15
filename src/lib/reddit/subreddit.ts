@@ -26,8 +26,11 @@ export interface PrivateSubreddit {
 	reason: string;
 }
 
-export async function getSubreddit(subreddit: string): Promise<Subreddit | undefined> {
-	const res = await fetchBase(`/r/${subreddit}`);
+export async function getSubreddit(
+	subreddit: string,
+	options: { sort?: string } = {}
+): Promise<Subreddit | undefined> {
+	const res = await fetchBase(`/r/${subreddit}/${options.sort ?? 'hot'}`);
 
 	const $ = load(res);
 

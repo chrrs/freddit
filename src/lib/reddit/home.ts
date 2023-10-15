@@ -6,8 +6,8 @@ export interface HomePage {
 	posts: Post[];
 }
 
-export async function getHomePage(): Promise<HomePage> {
-	const res = await fetchBase();
+export async function getHomePage(options: { sort?: string } = {}): Promise<HomePage> {
+	const res = await fetchBase(`/${options.sort ?? 'hot'}`);
 	const $ = load(res);
 
 	const siteTable = $('#siteTable');

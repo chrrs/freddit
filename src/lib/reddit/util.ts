@@ -77,3 +77,7 @@ export function extractPost(el: Element): Post {
 		score: Number(el.attribs['data-score']),
 	};
 }
+
+export function validateSort(sort: string | undefined): boolean {
+	return sort === undefined || ['hot', 'top', 'rising', 'controversial', 'new'].includes(sort);
+}

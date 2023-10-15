@@ -6,6 +6,8 @@
 
 	export let showSubreddit = false;
 	export let post: Post;
+
+	let loadEmbed = false;
 </script>
 
 <div class="post" class:nsfw={post.nsfw} class:sticky={post.sticky}>
@@ -46,10 +48,20 @@
 			</p>
 		{:else if post.data_url.type === 'image'}
 			<div class="content-spacer" />
-			<img class="image" src={post.data_url.url} alt={post.title} />
+			<img class="media" src={post.data_url.url} alt={post.title} />
 		{:else if post.data_url.type === 'video'}
 			<div class="content-spacer" />
 			<HlsPlayer src={post.data_url.url} />
+		{:else if post.data_url.type === 'embed'}
+			<div class="content-spacer" />
+			{#if loadEmbed}
+				<iframe class="media" src={post.data_url.url} title={post.title} />
+			{:else}
+				<div class="embed-warning">
+					<button on:click={() => (loadEmbed = true)}>Load Embed</button>
+					<a href={post.data_url.url}>{post.data_url.url}</a>
+				</div>
+			{/if}
 		{/if}
 	</div>
 </div>
@@ -120,8 +132,21 @@
 		@apply text-blue-800 hover:underline;
 	}
 
-	.image {
+	.media {
 		@apply w-full aspect-video;
 		@apply object-contain object-center;
+	}
+
+	.embed-warning {
+		@apply w-full aspect-video bg-black;
+		@apply flex flex-col items-center justify-center;
+	}
+
+	.embed-warning button {
+		@apply border px-2 py-1 text-white bg-black mb-2;
+	}
+
+	.embed-warning a {
+		@apply text-xs text-white hover:underline;
 	}
 </style>

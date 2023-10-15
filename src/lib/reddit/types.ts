@@ -1,4 +1,4 @@
-export type DataUrl = SelfDataUrl | UrlDataUrl | ImageDataUrl | VideoDataUrl;
+export type DataUrl = SelfDataUrl | UrlDataUrl | ImageDataUrl | VideoDataUrl | EmbedDataUrl;
 
 export interface SelfDataUrl {
 	type: 'self';
@@ -16,6 +16,11 @@ export interface ImageDataUrl {
 
 export interface VideoDataUrl {
 	type: 'video';
+	url: string;
+}
+
+export interface EmbedDataUrl {
+	type: 'embed';
 	url: string;
 }
 

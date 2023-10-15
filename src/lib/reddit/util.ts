@@ -23,14 +23,25 @@ export function extractPosts(siteTable: Cheerio<Element>): Post[] {
 export function extractPost(el: Element): Post {
 	const $ = load(el);
 
+	// FIXME: Proxy these URL's somehow
 	const url = el.attribs['data-url'];
 	let data_url: DataUrl;
 	if (el.attribs['class'].includes(' self')) {
 		data_url = { type: 'self' };
-	} else if (['jpg', 'jpeg', 'png', 'webp'].some((ext) => url.endsWith(ext))) {
+	} else if (['jpg', 'jpeg', 'png', 'webp', 'gif'].some((ext) => url.endsWith(ext))) {
 		data_url = { type: 'image', url };
 	} else if (url.startsWith('https://v.redd.it/')) {
 		data_url = { type: 'video', url: `${url}/HLSPlaylist.m3u8` };
+	} else if (url.startsWith('https://www.redgifs.com/watch')) {
+		data_url = {
+			type: 'embed',
+			url: url.replace('https://www.redgifs.com/watch', 'https://www.redgifs.com/ifr'),
+		};
+	} else if (url.startsWith('https://v3.redgifs.com/watch')) {
+		data_url = {
+			type: 'embed',
+			url: url.replace('https://v3.redgifs.com/watch', 'https://www.redgifs.com/ifr'),
+		};
 	} else {
 		data_url = { type: 'url', url };
 	}

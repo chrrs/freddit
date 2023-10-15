@@ -1,7 +1,11 @@
+<script>
+	import { resetAfterSubmit } from '~/lib/util';
+</script>
+
 <header>
 	<div class="container">
 		<a href="/" class="brand">freddit</a>
-		<form action="/search">
+		<form action="/search" on:submit={resetAfterSubmit}>
 			<input name="q" type="text" placeholder="Search..." />
 			<button type="submit">
 				<div class="i-lucide-search" />

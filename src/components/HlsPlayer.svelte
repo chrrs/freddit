@@ -18,11 +18,18 @@
 	});
 </script>
 
+<noscript><div class="warning">HLS Playback requires JS to be enabled.</div></noscript>
+
 <!-- svelte-ignore a11y-media-has-caption -->
 <video controls bind:this={el} />
 
 <style>
 	video {
 		@apply w-full aspect-video;
+	}
+
+	.warning {
+		@apply px-3 py-1 rounded;
+		@apply bg-red-200 text-red-700;
 	}
 </style>

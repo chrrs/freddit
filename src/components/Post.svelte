@@ -55,11 +55,11 @@
 		{:else if post.data_url.type === 'embed'}
 			<div class="content-spacer" />
 			{#if loadEmbed}
-				<iframe class="media" src={post.data_url.url} title={post.title} />
+				<iframe class="media" src={post.data_url.embed_url} title={post.title} />
 			{:else}
 				<div class="embed-warning">
 					<button on:click={() => (loadEmbed = true)}>Load Embed</button>
-					<a href={post.data_url.url}>{post.data_url.url}</a>
+					<a href={post.data_url.original_url}>{post.data_url.original_url}</a>
 				</div>
 			{/if}
 		{/if}

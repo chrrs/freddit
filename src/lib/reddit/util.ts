@@ -35,12 +35,14 @@ export function extractPost(el: Element): Post {
 	} else if (url.startsWith('https://www.redgifs.com/watch')) {
 		data_url = {
 			type: 'embed',
-			url: url.replace('https://www.redgifs.com/watch', 'https://www.redgifs.com/ifr'),
+			embed_url: url.replace('https://www.redgifs.com/watch', 'https://www.redgifs.com/ifr'),
+			original_url: url,
 		};
 	} else if (url.startsWith('https://v3.redgifs.com/watch')) {
 		data_url = {
 			type: 'embed',
-			url: url.replace('https://v3.redgifs.com/watch', 'https://www.redgifs.com/ifr'),
+			embed_url: url.replace('https://v3.redgifs.com/watch', 'https://www.redgifs.com/ifr'),
+			original_url: url,
 		};
 	} else {
 		data_url = { type: 'url', url };

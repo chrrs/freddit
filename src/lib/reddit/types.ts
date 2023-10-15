@@ -21,7 +21,8 @@ export interface VideoDataUrl {
 
 export interface EmbedDataUrl {
 	type: 'embed';
-	url: string;
+	embed_url: string;
+	original_url: string;
 }
 
 export interface Author {

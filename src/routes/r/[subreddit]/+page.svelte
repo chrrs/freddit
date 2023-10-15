@@ -17,6 +17,12 @@
 	{:else if data.private}
 		<ErrorMessage title="r/{data.name} is private" description={data.reason} />
 	{:else}
+		<h1 class="title">r/{data.name}</h1>
+		<h2 class="subtitle">
+			<b>{data.subscribers.toLocaleString('en-US')}</b> members -
+			<b>{data.online.toLocaleString('en-US')}</b> online
+		</h2>
+
 		{#each data.posts as post (post.id)}
 			<Post {showSubreddit} {post} />
 		{/each}
@@ -26,5 +32,18 @@
 <style>
 	.container {
 		@apply mt-4;
+	}
+
+	.title {
+		@apply font-bold text-xl;
+	}
+
+	.subtitle {
+		@apply mb-4;
+		@apply text-sm;
+	}
+
+	.subtitle b {
+		@apply font-semibold;
 	}
 </style>

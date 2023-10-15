@@ -10,6 +10,9 @@ export interface CommonSubreddit {
 }
 
 export interface NormalSubreddit {
+	subscribers: number;
+	online: number;
+
 	posts: Post[];
 }
 
@@ -67,6 +70,10 @@ export async function getSubreddit(subreddit: string): Promise<Subreddit | undef
 	return {
 		name,
 		multi,
+
+		subscribers: Number($('.subscribers > .number').text().replaceAll(',', '')),
+		online: Number($('.users-online > .number').text().replaceAll(',', '')),
+
 		posts: extractPosts(siteTable),
 	};
 }

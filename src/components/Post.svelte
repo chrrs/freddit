@@ -41,6 +41,7 @@
 		</a>
 
 		<!-- FIXME: Decide if we want 'card' style media or something smaller.. -->
+		<!-- FIXME: Blur NSFW media? -->
 		{#if post.data_url.type === 'url'}
 			<div class="content-spacer" />
 			<p class="link">

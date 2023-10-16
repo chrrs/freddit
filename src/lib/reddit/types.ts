@@ -23,6 +23,7 @@ export interface EmbedDataUrl {
 	type: 'embed';
 	embed_url: string;
 	original_url: string;
+	thumbnail?: string;
 }
 
 export interface Author {

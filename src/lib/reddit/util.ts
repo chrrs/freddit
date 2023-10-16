@@ -23,6 +23,8 @@ export function extractPosts(siteTable: Cheerio<Element>): Post[] {
 export function extractPost(el: Element): Post {
 	const $ = load(el);
 
+	const thumbnail = $('a.thumbnail > img').attr('src');
+
 	// FIXME: Proxy these URL's somehow
 	const url = el.attribs['data-url'];
 	let data_url: DataUrl;
@@ -32,29 +34,25 @@ export function extractPost(el: Element): Post {
 		data_url = { type: 'image', url };
 	} else if (url.startsWith('https://v.redd.it/')) {
 		data_url = { type: 'video', url: `${url}/HLSPlaylist.m3u8` };
-	} else if (url.startsWith('https://www.redgifs.com/watch')) {
+	} else if (/^https?:\/\/(v3\.|www\.)?redgifs\.com\/watch/gi.test(url)) {
 		data_url = {
 			type: 'embed',
-			embed_url: url.replace('https://www.redgifs.com/watch', 'https://www.redgifs.com/ifr'),
+			embed_url: url.replace(
+				/^https?:\/\/(v3\.|www\.)?redgifs\.com\/watch/gi,
+				'https://www.redgifs.com/ifr'
+			),
 			original_url: url,
+			thumbnail,
 		};
-	} else if (url.startsWith('https://v3.redgifs.com/watch')) {
+	} else if (/https?:\/\/((www\.)?youtube\.com\/watch\?v=|youtu\.be\/)/gi.test(url)) {
 		data_url = {
 			type: 'embed',
-			embed_url: url.replace('https://v3.redgifs.com/watch', 'https://www.redgifs.com/ifr'),
+			embed_url: url.replace(
+				/https?:\/\/((www\.)?youtube\.com\/watch\?v=|youtu\.be\/)/gi,
+				'https://www.youtube.com/embed/'
+			),
 			original_url: url,
-		};
-	} else if (url.startsWith('https://www.youtube.com/watch?v=')) {
-		data_url = {
-			type: 'embed',
-			embed_url: url.replace('https://www.youtube.com/watch?v=', 'https://www.youtube.com/embed/'),
-			original_url: url,
-		};
-	} else if (url.startsWith('https://youtu.be/')) {
-		data_url = {
-			type: 'embed',
-			embed_url: url.replace('https://youtu.be/', 'https://www.youtube.com/embed/'),
-			original_url: url,
+			thumbnail,
 		};
 	} else {
 		data_url = { type: 'url', url };

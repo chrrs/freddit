@@ -64,6 +64,9 @@
 				/>
 			{:else}
 				<div class="embed-warning">
+					{#if post.data_url.thumbnail}
+						<img src={post.data_url.thumbnail} alt="embed thumbnail" />
+					{/if}
 					<button on:click={() => (loadEmbed = true)}>Load Embed</button>
 					<a href={post.data_url.original_url}>{post.data_url.original_url}</a>
 				</div>
@@ -144,15 +147,22 @@
 	}
 
 	.embed-warning {
+		@apply relative overflow-hidden;
 		@apply w-full aspect-video bg-black;
 		@apply flex flex-col items-center justify-center;
 	}
 
+	.embed-warning img {
+		@apply absolute top-0 left-0 w-full h-full;
+		@apply object-cover object-center;
+		filter: brightness(50%) blur(4px);
+	}
+
 	.embed-warning button {
-		@apply border px-2 py-1 text-white bg-black mb-2;
+		@apply z-1 border px-2 py-1 text-white bg-black mb-2;
 	}
 
 	.embed-warning a {
-		@apply text-xs text-white hover:underline;
+		@apply z-1 text-xs text-white hover:underline;
 	}
 </style>

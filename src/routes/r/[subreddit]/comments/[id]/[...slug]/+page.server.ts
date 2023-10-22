@@ -1,9 +1,8 @@
+import { cacheHeaders } from '~/lib/cache';
 import { getPost } from '~/lib/reddit/post.js';
 
-export const config = {
-	isr: { expiration: 60 },
-};
+export async function load({ setHeaders, params }) {
+	setHeaders(cacheHeaders);
 
-export async function load({ params }) {
 	return await getPost(params.subreddit, params.id);
 }

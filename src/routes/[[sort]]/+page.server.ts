@@ -3,7 +3,7 @@ import { getHomePage } from '~/lib/reddit/home';
 import { validateSort } from '~/lib/reddit/util';
 
 export const config = {
-	isr: { expiration: 60 },
+	isr: { expiration: 60, allowQuery: ['t'] },
 };
 
 export async function load({ params, url }) {

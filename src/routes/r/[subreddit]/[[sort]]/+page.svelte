@@ -19,6 +19,11 @@
 		<ErrorMessage title="r/{data.name} has been banned" description={data.reason} />
 	{:else if data.private}
 		<ErrorMessage title="r/{data.name} is private" description={data.reason} />
+	{:else if data.nsfw}
+		<ErrorMessage
+			title="r/{data.name} is marked NSFW"
+			description="Over-18 content is disabled on this instance."
+		/>
 	{:else}
 		<h1 class="title">r/{data.name}</h1>
 		<h2 class="subtitle">

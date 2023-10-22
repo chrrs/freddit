@@ -1,3 +1,4 @@
+import { SHOW_NSFW } from '$env/static/private';
 import { type Cheerio, type Element, load } from 'cheerio';
 import type { DataUrl, Post } from './types';
 
@@ -7,7 +8,7 @@ export async function fetchBase(path: string = ''): Promise<string> {
 	return await fetch(BASE_URL + path, {
 		headers: {
 			Accept: 'text/html',
-			Cookie: 'over18=1',
+			Cookie: SHOW_NSFW === 'true' ? 'over18=1' : '',
 		},
 	}).then((res) => res.text());
 }

@@ -2,7 +2,8 @@ import { load } from 'cheerio';
 import type { Post } from './types';
 import { extractPosts, fetchBase } from './util';
 
-type Subreddit = CommonSubreddit & (NormalSubreddit | BannedSubreddit | PrivateSubreddit);
+type Subreddit = CommonSubreddit &
+	(NormalSubreddit | BannedSubreddit | NsfwSubreddit | PrivateSubreddit);
 
 export interface CommonSubreddit {
 	name: string;
@@ -19,6 +20,10 @@ export interface NormalSubreddit {
 export interface BannedSubreddit {
 	banned: true;
 	reason: string;
+}
+
+export interface NsfwSubreddit {
+	nsfw: true;
 }
 
 export interface PrivateSubreddit {
@@ -53,6 +58,13 @@ export async function getSubreddit(
 
 				banned: true,
 				reason: interstitial.find('.md > p').text(),
+			};
+		} else if (type === 'over 18') {
+			return {
+				name: subreddit,
+				multi: false,
+
+				nsfw: true,
 			};
 		} else if (type === 'private') {
 			return {

@@ -12,6 +12,8 @@ export async function getPost(subreddit: string, id: string): Promise<PostPage> 
 	const $ = load(res);
 
 	return {
-		post: extractPost($('#siteTable > .thing')[0]),
+		post: extractPost(
+			$('#siteTable > .thing, #siteTable > .pinnable-placeholder > .pinnable-content > .thing')[0]
+		),
 	};
 }

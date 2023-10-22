@@ -16,6 +16,7 @@
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.20.4",
 		"@types/nprogress": "^0.2.1",
+		"@types/sanitize-html": "^2.9.3",
 		"@typescript-eslint/eslint-plugin": "^6.0.0",
 		"@typescript-eslint/parser": "^6.0.0",
 		"@unocss/svelte-scoped": "^0.56.5",
@@ -37,6 +38,7 @@
 		"cheerio": "1.0.0-rc.12",
 		"date-fns": "^2.30.0",
 		"hls.js": "^1.4.12",
-		"nprogress": "^0.2.0"
+		"nprogress": "^0.2.0",
+		"sanitize-html": "^2.11.0"
 	}
 }

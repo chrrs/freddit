@@ -1,6 +1,7 @@
 import { SHOW_NSFW } from '$env/static/private';
 import { type Cheerio, type Element, load } from 'cheerio';
 import type { DataUrl, Post } from './types';
+import sanitizeHtml from 'sanitize-html';
 
 export const BASE_URL = 'https://old.reddit.com';
 
@@ -31,6 +32,17 @@ export function extractPost(el: Element): Post {
 	let data_url: DataUrl;
 	if (el.attribs['class'].includes(' self')) {
 		data_url = { type: 'self' };
+
+		const content = $('.expando form .usertext-body .md');
+		if (content.length > 0) {
+			data_url.content = sanitizeHtml(content.html() ?? '', {
+				allowedAttributes: {
+					...sanitizeHtml.defaults.allowedAttributes,
+					th: ['align'],
+					td: ['align'],
+				},
+			});
+		}
 	} else if (['jpg', 'jpeg', 'png', 'webp', 'gif'].some((ext) => url.endsWith(ext))) {
 		data_url = { type: 'image', url };
 	} else if (url.startsWith('https://v.redd.it/')) {

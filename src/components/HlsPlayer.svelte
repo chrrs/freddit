@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 
 	export let src: string;
+	export let fullHeight = false;
 
 	let el: HTMLVideoElement;
 	let hls: Hls;
@@ -21,11 +22,15 @@
 <noscript><div class="warning">HLS Playback requires JS to be enabled.</div></noscript>
 
 <!-- svelte-ignore a11y-media-has-caption -->
-<video controls bind:this={el} />
+<video class:aspect-16-9={!fullHeight} controls bind:this={el} />
 
 <style>
 	video {
-		@apply w-full aspect-video;
+		@apply w-full max-h-2xl;
+	}
+
+	.aspect-16-9 {
+		@apply aspect-video;
 	}
 
 	.warning {

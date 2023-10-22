@@ -27,6 +27,6 @@
 	}
 
 	:global(.container) {
-		@apply mx-auto max-w-2xl px-2;
+		@apply mx-auto max-w-4xl px-2;
 	}
 </style>

@@ -3,8 +3,10 @@
 	import { formatRFC7231, formatDistanceToNowStrict } from 'date-fns';
 	import AuthorName from './AuthorName.svelte';
 	import HlsPlayer from './HlsPlayer.svelte';
+	import Prose from './Prose.svelte';
 
 	export let showSubreddit = false;
+	export let fullHeight = false;
 	export let post: Post;
 
 	let loadEmbed = false;
@@ -47,17 +49,22 @@
 			<p class="link">
 				<a href={post.data_url.url}>{post.data_url.url}</a>
 			</p>
+		{:else if post.data_url.type === 'self' && post.data_url.content}
+			<hr class="self-separator" />
+			<!-- Sanitization done server side. -->
+			<Prose>{@html post.data_url.content}</Prose>
 		{:else if post.data_url.type === 'image'}
 			<div class="content-spacer" />
-			<img class="media" src={post.data_url.url} alt={post.title} />
+			<img class="media" class:aspect-16-9={!fullHeight} src={post.data_url.url} alt={post.title} />
 		{:else if post.data_url.type === 'video'}
 			<div class="content-spacer" />
-			<HlsPlayer src={post.data_url.url} />
+			<HlsPlayer {fullHeight} src={post.data_url.url} />
 		{:else if post.data_url.type === 'embed'}
 			<div class="content-spacer" />
 			{#if loadEmbed}
 				<iframe
 					class="media"
+					class:aspect-16-9={!fullHeight}
 					allow="fullscreen;"
 					src={post.data_url.embed_url}
 					title={post.title}
@@ -141,9 +148,17 @@
 		@apply text-blue-800 hover:underline;
 	}
 
+	hr.self-separator {
+		@apply mb-2 mt-3 border-gray-300;
+	}
+
 	.media {
-		@apply w-full aspect-video;
+		@apply w-full max-h-2xl;
 		@apply object-contain object-center;
+	}
+
+	.aspect-16-9 {
+		@apply aspect-video;
 	}
 
 	.embed-warning {

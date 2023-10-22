@@ -2,6 +2,7 @@ export type DataUrl = SelfDataUrl | UrlDataUrl | ImageDataUrl | VideoDataUrl | E
 
 export interface SelfDataUrl {
 	type: 'self';
+	content?: string;
 }
 
 export interface UrlDataUrl {

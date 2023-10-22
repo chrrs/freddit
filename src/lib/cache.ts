@@ -1,3 +1,3 @@
 export const cacheHeaders = {
-	'Cache-Control': 's-max-age=60, max-age=60, must-revalidate, stale-if-error',
+	'Cache-Control': 'public, s-max-age=60, max-age=0, stale-while-revalidate=600',
 };

@@ -2,7 +2,6 @@ import { error } from '@sveltejs/kit';
 import { getSubreddit } from '~/lib/reddit/subreddit.js';
 import { validateSort } from '~/lib/reddit/util';
 
-// FIXME: ISR breaks when using query parameters.
 export const config = {
 	isr: { expiration: 60, allowQuery: ['t'] },
 };

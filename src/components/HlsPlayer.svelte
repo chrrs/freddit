@@ -22,7 +22,7 @@
 <noscript><div class="warning">HLS Playback requires JS to be enabled.</div></noscript>
 
 <!-- svelte-ignore a11y-media-has-caption -->
-<video class:aspect-16-9={!fullHeight} controls bind:this={el} />
+<video class:aspect-16-9={!fullHeight} controls {src} bind:this={el} />
 
 <style>
 	video {

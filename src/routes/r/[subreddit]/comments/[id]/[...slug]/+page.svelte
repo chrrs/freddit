@@ -18,7 +18,7 @@
 
 	<!-- FIXME: Support continuations -->
 	{#each data.comments as comment (comment.id)}
-		<CommentThread parent={comment} />
+		<CommentThread parent={comment} op={data.post.author.name} />
 		<div class="comment-spacer" />
 	{/each}
 </div>

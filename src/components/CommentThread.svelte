@@ -5,6 +5,8 @@
 	import { formatDistanceToNowStrict, formatRFC7231 } from 'date-fns';
 
 	export let parent: Comment;
+	export let op: string | undefined = undefined;
+
 	let collapsed = false;
 </script>
 
@@ -13,7 +15,9 @@
 		<button class="gutter" title="Collapse thread" on:click={() => (collapsed = !collapsed)} />
 		<div class="content">
 			<h2 class="subtitle">
-				<span class="author"><AuthorName author={parent.author} /></span>
+				<span class="author">
+					<AuthorName author={parent.author} op={op === parent.author.name} />
+				</span>
 				{' • '}
 				<span title={formatRFC7231(parent.timestamp)}>
 					{formatDistanceToNowStrict(parent.timestamp, { addSuffix: true })}
@@ -36,7 +40,7 @@
 	{#if !collapsed}
 		<div class="replies">
 			{#each parent.replies as child (`${parent.id}_${child.id}`)}
-				<svelte:self parent={child} />
+				<svelte:self {op} parent={child} />
 			{/each}
 		</div>
 	{/if}

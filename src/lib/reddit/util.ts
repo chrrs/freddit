@@ -36,6 +36,15 @@ export function extractPost(el: Element): Post {
 		const content = $('.expando form .usertext-body .md');
 		if (content.length > 0) {
 			data_url.content = sanitizeHtml(content.html() ?? '', {
+				transformTags: {
+					a: (tagName, attribs) => ({
+						tagName,
+						attribs: {
+							...attribs,
+							href: attribs['href']?.replace(/^https?:\/\/(old\.|www\.)?reddit\.com/gi, ''),
+						},
+					}),
+				},
 				allowedAttributes: {
 					...sanitizeHtml.defaults.allowedAttributes,
 					th: ['align'],

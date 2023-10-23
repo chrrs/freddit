@@ -39,6 +39,14 @@
 		@apply my-2;
 	}
 
+	article :global(p:first-child) {
+		@apply mt-0;
+	}
+
+	article :global(p:last-child) {
+		@apply mb-0;
+	}
+
 	article :global(b),
 	article :global(strong) {
 		@apply font-semibold;

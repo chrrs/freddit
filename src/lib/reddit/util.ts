@@ -16,8 +16,6 @@ export async function fetchBase(path: string = ''): Promise<string> {
 
 export function extractPosts(siteTable: Cheerio<Element>): Post[] {
 	// FIXME: Detect when there are no posts.
-	// FIXME: Detect private subreddits
-	// FIXME: Detect when subreddit does not exist (currently goes to r/subreddits)
 
 	return siteTable.children('.thing:not(.promoted)').toArray().map(extractPost);
 }
@@ -35,25 +33,7 @@ export function extractPost(el: Element): Post {
 
 		const content = $('.expando form .usertext-body .md');
 		if (content.length > 0) {
-			data_url.content = sanitizeHtml(content.html() ?? '', {
-				transformTags: {
-					a: (tagName, attribs) => ({
-						tagName,
-						attribs: {
-							...attribs,
-							href: attribs['href']?.replace(/^https?:\/\/(old\.|www\.)?reddit\.com/gi, ''),
-						},
-					}),
-				},
-				allowedAttributes: {
-					...sanitizeHtml.defaults.allowedAttributes,
-					th: ['align'],
-					td: ['align'],
-				},
-				allowedClasses: {
-					span: ['md-spoiler-text'],
-				},
-			});
+			data_url.content = sanitizeMd(content.html() ?? '');
 		}
 	} else if (['jpg', 'jpeg', 'png', 'webp', 'gif'].some((ext) => url.endsWith(ext))) {
 		data_url = { type: 'image', url };
@@ -115,4 +95,26 @@ export function extractPost(el: Element): Post {
 
 export function validateSort(sort: string | undefined): boolean {
 	return sort === undefined || ['hot', 'top', 'rising', 'controversial', 'new'].includes(sort);
+}
+
+export function sanitizeMd(html: string): string {
+	return sanitizeHtml(html, {
+		transformTags: {
+			a: (tagName, attribs) => ({
+				tagName,
+				attribs: {
+					...attribs,
+					href: attribs['href']?.replace(/^https?:\/\/(old\.|www\.)?reddit\.com/gi, ''),
+				},
+			}),
+		},
+		allowedAttributes: {
+			...sanitizeHtml.defaults.allowedAttributes,
+			th: ['align'],
+			td: ['align'],
+		},
+		allowedClasses: {
+			span: ['md-spoiler-text'],
+		},
+	});
 }

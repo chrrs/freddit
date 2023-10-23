@@ -52,3 +52,17 @@ export interface Post {
 	comments: number;
 	score: number;
 }
+
+export interface Comment {
+	id: string;
+	author: Author;
+
+	content: string;
+	timestamp: number;
+
+	sticky: boolean;
+	score: number;
+
+	replies: Comment[];
+	continuation?: string;
+}

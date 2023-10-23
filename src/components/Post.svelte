@@ -31,8 +31,7 @@
 				{formatDistanceToNowStrict(post.timestamp, { addSuffix: true })}
 			</span>
 			{' • '}
-			<!-- FIXME: Add author name component -->
-			<a href={`/u/${post.author.name}`}><AuthorName author={post.author} /></a>
+			<AuthorName author={post.author} />
 			{' • '}
 			<a href={post.post_url}>{post.comments.toLocaleString('en-US')} comments</a>
 			{' • '}

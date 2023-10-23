@@ -16,6 +16,9 @@
 	<div class="sidebar">{post.score.toLocaleString('en-US')}</div>
 	<div class="content">
 		<h2 class="subtitle">
+			{#if post.spoiler}
+				<span class="spoiler">SPOILER</span>
+			{/if}
 			{#if post.nsfw}
 				<span class="nsfw">NSFW</span>
 			{/if}
@@ -108,6 +111,11 @@
 
 	.subtitle {
 		@apply text-xs text-gray-500;
+	}
+
+	.subtitle .spoiler {
+		@apply border-2 text-gray-700 border-gray-300 px-1 mr-1;
+		@apply font-bold;
 	}
 
 	.subtitle .nsfw {

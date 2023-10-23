@@ -50,6 +50,9 @@ export function extractPost(el: Element): Post {
 					th: ['align'],
 					td: ['align'],
 				},
+				allowedClasses: {
+					span: ['md-spoiler-text'],
+				},
 			});
 		}
 	} else if (['jpg', 'jpeg', 'png', 'webp', 'gif'].some((ext) => url.endsWith(ext))) {

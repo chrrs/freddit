@@ -1,4 +1,18 @@
-<article>
+<script lang="ts">
+	function tryRevealSpoiler(event: Event) {
+		// @ts-expect-error classList exists on valid HTML targets, and
+		//                  the condition failes if it does not.
+		if (event.target?.classList?.contains('md-spoiler-text')) {
+			// @ts-expect-error see above.
+			event.target.classList.add('revealed');
+		}
+	}
+</script>
+
+<!-- We are using this element to detect clicks on spoilers to reveal them. -->
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<article on:click={tryRevealSpoiler}>
 	<slot />
 </article>
 
@@ -86,5 +100,13 @@
 
 	article :global(hr) {
 		@apply my-2;
+	}
+
+	article :global(.md-spoiler-text) {
+		@apply text-transparent bg-gray-400 rounded cursor-pointer;
+	}
+
+	article :global(.md-spoiler-text.revealed) {
+		@apply text-black bg-gray-100;
 	}
 </style>

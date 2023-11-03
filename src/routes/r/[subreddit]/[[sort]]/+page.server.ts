@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
 import { cacheHeaders } from '~/lib/cache.js';
-import { getSubreddit } from '~/lib/reddit/subreddit.js';
-import { validateSort } from '~/lib/reddit/util';
+import { fetchSubreddit } from '~/lib/reddit/scrape.js';
+import { validateSort } from '~/lib/util';
 
 export async function load({ setHeaders, params, url }) {
 	setHeaders(cacheHeaders);
@@ -10,9 +10,9 @@ export async function load({ setHeaders, params, url }) {
 		throw error(404, 'Not Found');
 	}
 
-	const subreddit = await getSubreddit(params.subreddit, {
+	const subreddit = await fetchSubreddit(params.subreddit, {
 		sort: params.sort,
-		timeFrame: url.searchParams.get('t') ?? 'day',
+		timeFrame: url.searchParams.get('t') ?? undefined,
 	});
 
 	if (subreddit === undefined) {

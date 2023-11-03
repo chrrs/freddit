@@ -6,38 +6,42 @@
 
 	export let data;
 
-	$: timeFrame = $page.url.searchParams.get('t') ?? 'day';
-	$: showSubreddit = ['popular', 'all'].includes(data.name.toLowerCase()) || data.multi;
+	// FIXME: Better support for multireddits.
+	// FIXME: Don't show subscriber counts / online counts on all / popular / multi.
+
+	$: name = data.info?.name ?? $page.params.subreddit;
+	$: showSubredditOnPosts =
+		['popular', 'all'].includes(name) || $page.params.subreddit.includes('+');
 </script>
 
 <svelte:head>
-	<title>r/{data.name} - Freddit</title>
+	<title>r/{name} - Freddit</title>
 </svelte:head>
 
 <main class="container">
-	{#if data.banned}
-		<ErrorMessage title="r/{data.name} has been banned" description={data.reason} />
-	{:else if data.private}
-		<ErrorMessage title="r/{data.name} is private" description={data.reason} />
-	{:else if data.nsfw}
+	{#if data.type === 'banned'}
+		<ErrorMessage title="r/{name} has been banned" description={data.reason} />
+	{:else if data.type === 'private'}
+		<ErrorMessage title="r/{name} is private" description={data.reason} />
+	{:else if data.type === 'nsfw-blocked'}
 		<ErrorMessage
-			title="r/{data.name} is marked NSFW"
+			title="r/{name} is marked NSFW"
 			description="Over-18 content is disabled on this instance."
 		/>
 	{:else}
-		<h1 class="title">r/{data.name}</h1>
+		<h1 class="title">r/{name}</h1>
 		<h2 class="subtitle">
-			<b>{data.subscribers.toLocaleString('en-US')}</b> members -
-			<b>{data.online.toLocaleString('en-US')}</b> online
+			<b>{data.info.subscribers.toLocaleString('en-US')}</b> members -
+			<b>{data.info.online.toLocaleString('en-US')}</b> online
 		</h2>
 
 		<SortSelector
 			current={$page.params.sort ?? 'hot'}
-			currentTimeFrame={timeFrame}
+			currentTimeFrame={$page.url.searchParams.get('t') ?? 'day'}
 			urlPrefix="/r/{$page.params.subreddit}"
 		/>
 		{#each data.posts as post (post.id)}
-			<Post {showSubreddit} {post} />
+			<Post showSubreddit={showSubredditOnPosts} {post} />
 		{/each}
 	{/if}
 </main>

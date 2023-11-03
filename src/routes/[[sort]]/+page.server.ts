@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
 import { cacheHeaders } from '~/lib/cache';
-import { getHomePage } from '~/lib/reddit/home';
-import { validateSort } from '~/lib/reddit/util';
+import { fetchHome } from '~/lib/reddit/scrape.js';
+import { validateSort } from '~/lib/util';
 
 export async function load({ setHeaders, params, url }) {
 	setHeaders(cacheHeaders);
@@ -10,5 +10,10 @@ export async function load({ setHeaders, params, url }) {
 		throw error(404, 'Not Found');
 	}
 
-	return await getHomePage({ sort: params.sort, timeFrame: url.searchParams.get('t') ?? 'day' });
+	return {
+		posts: await fetchHome({
+			sort: params.sort,
+			timeFrame: url.searchParams.get('t') ?? undefined,
+		}),
+	};
 }

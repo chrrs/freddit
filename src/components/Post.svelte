@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Post } from '~/lib/reddit/types';
+	import type { Post } from '~/lib/reddit/post';
 	import { formatRFC7231, formatDistanceToNowStrict } from 'date-fns';
 	import AuthorName from './AuthorName.svelte';
 	import HlsPlayer from './HlsPlayer.svelte';
@@ -33,11 +33,11 @@
 			{' • '}
 			<AuthorName author={post.author} />
 			{' • '}
-			<a href={post.post_url}>{post.comments.toLocaleString('en-US')} comments</a>
+			<a href={post.commentsUrl}>{post.comments.toLocaleString('en-US')} comments</a>
 			{' • '}
 			<span>{post.domain}</span>
 		</h2>
-		<a class="title" href={post.post_url}>
+		<a class="title" href={post.commentsUrl}>
 			{#if post.flair}
 				<span class="flair">{post.flair}</span>
 			{/if}
@@ -46,38 +46,38 @@
 
 		<!-- FIXME: Decide if we want 'card' style media or something smaller.. -->
 		<!-- FIXME: Blur NSFW media? -->
-		{#if post.data_url.type === 'url'}
+		{#if post.content.type === 'link'}
 			<div class="content-spacer" />
 			<p class="link">
-				<a href={post.data_url.url}>{post.data_url.url}</a>
+				<a href={post.content.url}>{post.content.url}</a>
 			</p>
-		{:else if post.data_url.type === 'self' && post.data_url.content}
+		{:else if post.content.type === 'self' && post.content.html}
 			<hr class="self-separator" />
 			<!-- Sanitization done server side. -->
-			<Prose>{@html post.data_url.content}</Prose>
-		{:else if post.data_url.type === 'image'}
+			<Prose>{@html post.content.html}</Prose>
+		{:else if post.content.type === 'image'}
 			<div class="content-spacer" />
-			<img class="media" class:aspect-16-9={!fullHeight} src={post.data_url.url} alt={post.title} />
-		{:else if post.data_url.type === 'video'}
+			<img class="media" class:aspect-16-9={!fullHeight} src={post.content.src} alt={post.title} />
+		{:else if post.content.type === 'hls'}
 			<div class="content-spacer" />
-			<HlsPlayer {fullHeight} src={post.data_url.url} />
-		{:else if post.data_url.type === 'embed'}
+			<HlsPlayer {fullHeight} src={post.content.src} />
+		{:else if post.content.type === 'embed'}
 			<div class="content-spacer" />
 			{#if loadEmbed}
 				<iframe
 					class="media"
 					class:aspect-16-9={!fullHeight}
 					allow="fullscreen;"
-					src={post.data_url.embed_url}
+					src={post.content.embedUrl}
 					title={post.title}
 				/>
 			{:else}
 				<div class="embed-warning">
-					{#if post.data_url.thumbnail}
-						<img src={post.data_url.thumbnail} alt="embed thumbnail" />
+					{#if post.content.thumbnailSrc}
+						<img src={post.content.thumbnailSrc} alt="embed thumbnail" />
 					{/if}
 					<button on:click={() => (loadEmbed = true)}>Load Embed</button>
-					<a href={post.data_url.original_url}>{post.data_url.original_url}</a>
+					<a href={post.content.originalUrl}>{post.content.originalUrl}</a>
 				</div>
 			{/if}
 		{/if}

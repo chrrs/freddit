@@ -1,77 +1,51 @@
-import { load } from 'cheerio';
-import type { Post } from './types';
-import { extractPosts, fetchBase } from './util';
+import type { CheerioAPI } from 'cheerio';
+import { extractPost, type Post } from './post';
 
-type Subreddit = CommonSubreddit &
-	(NormalSubreddit | BannedSubreddit | NsfwSubreddit | PrivateSubreddit);
+export type Subreddit =
+	| {
+			type: 'banned';
+			reason: string;
+	  }
+	| {
+			type: 'nsfw-blocked';
+	  }
+	| {
+			type: 'private';
+			reason: string;
+	  }
+	| {
+			type: 'public';
+			info: SubredditInfo;
+			posts: Post[];
+	  };
 
-export interface CommonSubreddit {
+export interface SubredditInfo {
 	name: string;
-	multi: boolean;
-}
-
-export interface NormalSubreddit {
 	subscribers: number;
 	online: number;
-
-	posts: Post[];
 }
 
-export interface BannedSubreddit {
-	banned: true;
-	reason: string;
-}
-
-export interface NsfwSubreddit {
-	nsfw: true;
-}
-
-export interface PrivateSubreddit {
-	private: true;
-	reason: string;
-}
-
-export async function getSubreddit(
-	subreddit: string,
-	options: { sort?: string; timeFrame?: string } = {}
-): Promise<Subreddit | undefined> {
-	const res = await fetchBase(
-		`/r/${subreddit}/${options.sort ?? 'hot'}?t=${options.timeFrame ?? ''}`
-	);
-
-	const $ = load(res);
-
+export function extractSubreddit($: CheerioAPI): Subreddit | undefined {
 	if ($('title').text() === 'search results') {
 		return undefined;
 	}
 
-	const name = $('#header .redditname > a').text();
-	const multi = subreddit.includes('+');
-
 	const interstitial = $('.content > .interstitial');
 	if (interstitial.length > 0) {
 		const type = interstitial.find('.interstitial-image').attr('alt');
+
 		if (type === 'banned') {
 			return {
-				name,
-				multi,
-
-				banned: true,
+				type: 'banned',
 				reason: interstitial.find('.md > p').text(),
 			};
 		} else if (type === 'over 18') {
 			return {
-				name: subreddit,
-				multi: false,
-
-				nsfw: true,
+				type: 'nsfw-blocked',
 			};
 		} else if (type === 'private') {
 			return {
-				name,
-				multi,
-
-				private: true,
+				type: 'private',
 				reason: interstitial.find('.md > .interstitial-subreddit-description > p').text(),
 			};
 		} else {
@@ -79,18 +53,16 @@ export async function getSubreddit(
 		}
 	}
 
-	const siteTable = $('#siteTable');
-	if (siteTable.length === 0) {
-		throw new Error('no siteTable in page');
-	}
-
 	return {
-		name,
-		multi,
-
-		subscribers: Number($('.subscribers > .number').text().replaceAll(',', '')),
-		online: Number($('.users-online > .number').text().replaceAll(',', '')),
-
-		posts: extractPosts(siteTable),
+		type: 'public',
+		info: {
+			name: $('#header .redditname > a').text(),
+			subscribers: Number($('.subscribers > .number').text().replaceAll(',', '')),
+			online: Number($('.users-online > .number').text().replaceAll(',', '')),
+		},
+		posts: $('#siteTable')
+			.children('.thing:not(.promoted)')
+			.toArray()
+			.map((el) => extractPost($, el)),
 	};
 }

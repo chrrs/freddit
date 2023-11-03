@@ -1,23 +1,29 @@
 <script lang="ts">
-	import type { Author } from '~/lib/reddit/types';
+	import type { Author } from '~/lib/reddit/author';
 
-	export let author: Author;
-	export let op = false;
+	export let author: Author | undefined;
 </script>
 
-<a
-	href="/u/{author.name}"
-	class:text-blue-500={!author.role && op}
-	class:text-red-500={author.role === 'admin'}
-	class:text-green-700={author.role === 'moderator'}
-	title={op ? 'original poster' : undefined}
->
-	u/{author.name}
+{#if author}
+	<a
+		href="/u/{author.name}"
+		class:text-blue-500={!author.distinguished && author.originalPoster}
+		class:text-red-700={author.distinguished === 'admin emeritus'}
+		class:text-red-500={author.distinguished === 'admin'}
+		class:text-green-700={author.distinguished === 'moderator'}
+		title={author.originalPoster ? 'original poster' : undefined}
+	>
+		u/{author.name}
 
-	{#if author.role}
-		<span class="role" title={author.role}>[{author.role[0].toUpperCase()}]</span>
-	{/if}
-</a>
+		{#if author.distinguished}
+			<span class="role" title={author.distinguished}>
+				[{author.distinguished[0].toUpperCase()}]
+			</span>
+		{/if}
+	</a>
+{:else}
+	<span>u/[deleted]</span>
+{/if}
 
 <style>
 	a {

@@ -1,90 +1,53 @@
 <script lang="ts">
-	import type { Comment } from '~/lib/reddit/types';
-	import AuthorName from './AuthorName.svelte';
-	import Prose from './Prose.svelte';
-	import { formatDistanceToNowStrict, formatRFC7231 } from 'date-fns';
+	import { default as CommentComponent } from './Comment.svelte';
+	import type { Comment, Thread } from '~/lib/reddit/comment';
 
-	export let parent: Comment;
-	export let op: string | undefined = undefined;
+	export let parent: Comment | undefined = undefined;
+	export let thread: Thread;
 
 	let collapsed = false;
 </script>
 
 <div class="thread">
-	<div class="parent" class:sticky={parent.sticky}>
-		<button class="gutter" title="Collapse thread" on:click={() => (collapsed = !collapsed)} />
-		<div class="content">
-			<h2 class="subtitle">
-				<span class="author">
-					<AuthorName author={parent.author} op={op === parent.author.name} />
-				</span>
-				{' • '}
-				<span title={formatRFC7231(parent.timestamp)}>
-					{formatDistanceToNowStrict(parent.timestamp, { addSuffix: true })}
-				</span>
-				{' • '}
-				<span class="score">{parent.score.toLocaleString('en-US')}</span>
-				{' vote' + (parent.score === 1 ? '' : 's')}
-			</h2>
-			{#if collapsed}
-				<i class="collapsed-placeholder" />
-			{:else}
-				<Prose>
-					{@html parent.content}
-				</Prose>
-			{/if}
-		</div>
-	</div>
+	{#if parent}
+		<CommentComponent comment={parent} bind:collapsed />
+	{/if}
 
-	<!-- FIXME: Support continuations -->
 	{#if !collapsed}
-		<div class="replies">
-			{#each parent.replies as child (`${parent.id}_${child.id}`)}
-				<svelte:self {op} parent={child} />
+		<div class="replies" class:inset={parent !== undefined}>
+			{#each thread.children as child (child.id)}
+				<svelte:self parent={child} thread={child.replies} />
+
+				{#if parent === undefined}
+					<div class="spacer" />
+				{/if}
 			{/each}
+
+			{#if thread.continuationLength}
+				<button disabled class="continuation">
+					{thread.continuationLength} hidden replies...
+				</button>
+			{/if}
 		</div>
 	{/if}
 </div>
 
 <style>
-	.parent {
-		@apply flex items-stretch mb-1;
-		@apply bg-white rounded overflow-hidden;
-		@apply border-gray-100 border;
-	}
-
-	.parent.sticky {
-		@apply border-green-500;
-	}
-
-	.gutter {
-		@apply flex-none w-4 bg-gray-100 float-left;
-	}
-
-	.content {
-		@apply flex-grow;
-		@apply px-2 py-1;
-	}
-
-	.subtitle {
-		@apply text-xs text-gray-500;
-	}
-
-	.subtitle .author {
-		@apply font-bold;
-	}
-
-	.subtitle .score {
-		@apply font-semibold;
-	}
-
-	i.collapsed-placeholder {
-		@apply block w-12 h-1 mb-1 mt-2 bg-gray-100;
-	}
-
-	.replies {
+	.replies.inset {
 		@apply ml-1;
 		@apply border-l-[0.25em] border-gray-300;
 		@apply pl-6;
+	}
+
+	.spacer {
+		@apply h-3;
+	}
+
+	.continuation {
+		@apply opacity-50;
+
+		@apply block text-center w-full py-0.5 mb-1;
+		@apply bg-blue-200 rounded;
+		@apply text-blue-600 text-sm font-semibold uppercase;
 	}
 </style>

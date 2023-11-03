@@ -12,15 +12,11 @@
 <div class="container">
 	<Post showSubreddit fullHeight post={data.post} />
 
-	<!-- FIXME: Temporary spacing -->
-	<div class="comment-spacer" />
 	<div class="comment-spacer" />
 
-	<!-- FIXME: Support continuations -->
-	{#each data.comments as comment (comment.id)}
-		<CommentThread parent={comment} op={data.post.author.name} />
-		<div class="comment-spacer" />
-	{/each}
+	{#if data.post.replies}
+		<CommentThread thread={data.post.replies} />
+	{/if}
 </div>
 
 <style>
@@ -29,6 +25,6 @@
 	}
 
 	.comment-spacer {
-		@apply h-3;
+		@apply h-6;
 	}
 </style>

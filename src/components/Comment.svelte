@@ -20,8 +20,10 @@
 				{formatDistanceToNowStrict(comment.timestamp, { addSuffix: true })}
 			</span>
 			{' • '}
-			<span class="score">{comment.score.toLocaleString('en-US')}</span>
-			{' vote' + (comment.score === 1 ? '' : 's')}
+			<a class="permalink" href={comment.permalink}>
+				<span class="score">{comment.score.toLocaleString('en-US')}</span>
+				{' vote' + (comment.score === 1 ? '' : 's')}
+			</a>
 		</h2>
 		{#if collapsed}
 			<i class="collapsed-placeholder" />
@@ -63,6 +65,10 @@
 
 	.subtitle .score {
 		@apply font-semibold;
+	}
+
+	.subtitle .permalink {
+		@apply hover:underline;
 	}
 
 	i.collapsed-placeholder {

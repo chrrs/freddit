@@ -63,9 +63,11 @@ export async function fetchSubreddit(
 export async function fetchPost(
 	subreddit: string,
 	id: string,
-	sort?: SortOptions
+	options: { thread?: string; sort?: SortOptions } = {}
 ): Promise<Post | undefined> {
-	const res = await fetchBase(`/r/${subreddit}/comments/${id}/_/`, { sort });
+	const res = await fetchBase(`/r/${subreddit}/comments/${id}/_/${options.thread ?? ''}`, {
+		sort: options.sort,
+	});
 	const $ = load(res);
 
 	if ($('#classy-error > h1').text() === 'page not found') {

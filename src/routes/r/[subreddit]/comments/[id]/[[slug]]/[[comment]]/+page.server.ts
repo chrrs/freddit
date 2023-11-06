@@ -5,7 +5,9 @@ import { fetchPost } from '~/lib/reddit/scrape.js';
 export async function load({ setHeaders, params }) {
 	setHeaders(cacheHeaders);
 
-	const post = await fetchPost(params.subreddit, params.id);
+	const post = await fetchPost(params.subreddit, params.id, {
+		thread: params.comment,
+	});
 
 	if (!post) {
 		throw error(404, 'Not Found');

@@ -9,6 +9,7 @@ export interface Thread {
 
 export interface Comment {
 	id: string;
+	permalink: string;
 
 	content: { html: string };
 
@@ -35,6 +36,7 @@ export function extractComment($: CheerioAPI, el: Element, op?: string): Comment
 
 	return {
 		id: thing.attr('data-fullname') ?? `comment-${thing.index()}`,
+		permalink: thing.attr('data-permalink') ?? '/404',
 
 		content: {
 			html: sanitizeMd(thing.find('> .entry > form > .usertext-body > .md').html() || '[deleted]'),

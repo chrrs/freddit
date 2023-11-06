@@ -50,12 +50,7 @@ export function extractComment($: CheerioAPI, el: Element, op?: string): Comment
 		timestamp: new Date(tagline.find('> time').attr('datetime') ?? 0).getTime(),
 
 		sticky: thing.hasClass('stickied'),
-		score: Number(
-			tagline
-				.find('> .score.unvoted')
-				.text()
-				.replaceAll(/[^\d-]/g, '')
-		),
+		score: Number(tagline.find('> .score.unvoted').attr('title')),
 
 		replies: {
 			children: childrenTable

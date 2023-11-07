@@ -57,6 +57,7 @@ export type PostContent =
 export function extractPost($: CheerioAPI, el: Element): Post {
 	const thing = $(el);
 	const title = thing.find('> .entry > .top-matter > p.title');
+	const tagline = thing.find('> .entry > .top-matter > p.tagline');
 
 	const authorName = thing.attr('data-author');
 
@@ -71,6 +72,7 @@ export function extractPost($: CheerioAPI, el: Element): Post {
 		author: authorName
 			? {
 					name: authorName,
+					flair: tagline.find('> span.flair').attr('title'),
 					distinguished: extractDistinguished(
 						thing.find('> .entry > .top-matter > p.tagline > a.author')
 					),

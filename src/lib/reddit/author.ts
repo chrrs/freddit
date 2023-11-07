@@ -4,6 +4,7 @@ export type Distinguished = 'moderator' | 'admin' | 'admin emeritus';
 
 export interface Author {
 	name: string;
+	flair?: string;
 	distinguished?: Distinguished;
 	originalPoster?: boolean;
 }

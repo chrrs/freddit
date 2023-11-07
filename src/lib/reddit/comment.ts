@@ -45,6 +45,7 @@ export function extractComment($: CheerioAPI, el: Element, op?: string): Comment
 		author: authorName
 			? {
 					name: authorName,
+					flair: tagline.find('> span.flair').attr('title'),
 					distinguished: extractDistinguished(tagline.find('> a.author')),
 					originalPoster: authorName === op,
 			  }

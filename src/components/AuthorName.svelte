@@ -21,6 +21,10 @@
 			</span>
 		{/if}
 	</a>
+
+	{#if author.flair}
+		<span class="flair">{author.flair}</span>
+	{/if}
 {:else}
 	<span>u/[deleted]</span>
 {/if}
@@ -32,5 +36,10 @@
 
 	.role {
 		@apply font-normal;
+	}
+
+	.flair {
+		@apply font-normal;
+		@apply px-1 border-1 border-gray-200;
 	}
 </style>

@@ -48,6 +48,6 @@
 
 		@apply block text-center w-full py-0.5 mb-1;
 		@apply bg-blue-200 rounded;
-		@apply text-blue-600 text-sm font-semibold uppercase;
+		@apply text-blue-700 text-sm font-semibold uppercase;
 	}
 </style>

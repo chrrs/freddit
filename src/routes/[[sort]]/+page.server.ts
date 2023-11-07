@@ -10,10 +10,13 @@ export async function load({ setHeaders, params, url }) {
 		throw error(404, 'Not Found');
 	}
 
-	return {
-		posts: await fetchHome({
+	return await fetchHome({
+		sort: {
 			sort: params.sort,
 			timeFrame: url.searchParams.get('t') ?? undefined,
-		}),
-	};
+		},
+		count: url.searchParams.get('count') ?? undefined,
+		before: url.searchParams.get('before') ?? undefined,
+		after: url.searchParams.get('after') ?? undefined,
+	});
 }

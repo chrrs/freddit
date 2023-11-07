@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import Pagination from '~/components/Pagination.svelte';
 	import Post from '~/components/Post.svelte';
 	import SortSelector from '~/components/SortSelector.svelte';
 
@@ -20,6 +21,8 @@
 	{#each data.posts as post (post.id)}
 		<Post showSubreddit {post} />
 	{/each}
+
+	<Pagination next={data.pagelinks.next} previous={data.pagelinks.previous} />
 </main>
 
 <style>

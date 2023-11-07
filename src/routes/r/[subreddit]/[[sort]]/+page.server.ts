@@ -11,8 +11,13 @@ export async function load({ setHeaders, params, url }) {
 	}
 
 	const subreddit = await fetchSubreddit(params.subreddit, {
-		sort: params.sort,
-		timeFrame: url.searchParams.get('t') ?? undefined,
+		sort: {
+			sort: params.sort,
+			timeFrame: url.searchParams.get('t') ?? undefined,
+		},
+		count: url.searchParams.get('count') ?? undefined,
+		before: url.searchParams.get('before') ?? undefined,
+		after: url.searchParams.get('after') ?? undefined,
 	});
 
 	if (subreddit === undefined) {

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import ErrorMessage from '~/components/ErrorMessage.svelte';
+	import Pagination from '~/components/Pagination.svelte';
 	import Post from '~/components/Post.svelte';
 	import SortSelector from '~/components/SortSelector.svelte';
 
@@ -40,9 +41,12 @@
 			currentTimeFrame={$page.url.searchParams.get('t') ?? 'day'}
 			urlPrefix="/r/{$page.params.subreddit}"
 		/>
+
 		{#each data.posts as post (post.id)}
 			<Post showSubreddit={showSubredditOnPosts} {post} />
 		{/each}
+
+		<Pagination next={data.pagelinks.next} previous={data.pagelinks.previous} />
 	{/if}
 </main>
 

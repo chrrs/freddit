@@ -21,7 +21,9 @@ export async function fetchBase(
 	const url = new URL(path, BASE_URL);
 
 	for (const [name, value] of Object.entries(options.query ?? {})) {
-		url.searchParams.set(name, (value as string).toString());
+		if (value !== undefined) {
+			url.searchParams.set(name, (value as string).toString());
+		}
 	}
 
 	if (options.sort) {
@@ -40,21 +42,57 @@ export async function fetchBase(
 	}).then((res) => res.text());
 }
 
-export async function fetchHome(sort?: SortOptions): Promise<Post[]> {
-	const res = await fetchBase('', { sort });
+export interface Home {
+	posts: Post[];
+	pagelinks: {
+		next?: string;
+		previous?: string;
+	};
+}
+
+export async function fetchHome(
+	options: {
+		sort?: SortOptions;
+		count?: string;
+		before?: string;
+		after?: string;
+	} = {}
+): Promise<Home> {
+	const res = await fetchBase('', {
+		sort: options.sort,
+		query: { count: options.count, before: options.before, after: options.after },
+	});
 	const $ = load(res);
 
-	return $('#siteTable')
-		.children('.thing:not(.promoted)')
-		.toArray()
-		.map((el) => extractPost($, el));
+	return {
+		posts: $('#siteTable')
+			.children('.thing:not(.promoted)')
+			.toArray()
+			.map((el) => extractPost($, el)),
+		pagelinks: {
+			next: $('.next-button > a')
+				.attr('href')
+				?.replace(/^https?:\/\/old\.reddit\.com/g, ''),
+			previous: $('.prev-button > a')
+				.attr('href')
+				?.replace(/^https?:\/\/old\.reddit\.com/g, ''),
+		},
+	};
 }
 
 export async function fetchSubreddit(
 	subreddit: string,
-	sort?: SortOptions
+	options: {
+		sort?: SortOptions;
+		count?: string;
+		before?: string;
+		after?: string;
+	} = {}
 ): Promise<Subreddit | undefined> {
-	const res = await fetchBase(`r/${subreddit}`, { sort });
+	const res = await fetchBase(`r/${subreddit}`, {
+		sort: options.sort,
+		query: { count: options.count, before: options.before, after: options.after },
+	});
 	const $ = load(res);
 
 	return extractSubreddit($);

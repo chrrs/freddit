@@ -17,6 +17,10 @@ export type Subreddit =
 			type: 'public';
 			info: SubredditInfo;
 			posts: Post[];
+			pagelinks: {
+				previous?: string;
+				next?: string;
+			};
 	  };
 
 export interface SubredditInfo {
@@ -64,5 +68,13 @@ export function extractSubreddit($: CheerioAPI): Subreddit | undefined {
 			.children('.thing:not(.promoted)')
 			.toArray()
 			.map((el) => extractPost($, el)),
+		pagelinks: {
+			next: $('.next-button > a')
+				.attr('href')
+				?.replace(/^https?:\/\/old\.reddit\.com/g, ''),
+			previous: $('.prev-button > a')
+				.attr('href')
+				?.replace(/^https?:\/\/old\.reddit\.com/g, ''),
+		},
 	};
 }

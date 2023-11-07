@@ -21,8 +21,12 @@
 			</span>
 			{' • '}
 			<a class="permalink" href={comment.permalink}>
-				<span class="score">{comment.score.toLocaleString('en-US')}</span>
-				{' vote' + (comment.score === 1 ? '' : 's')}
+				{#if comment.score}
+					<span class="score">{comment.score.toLocaleString('en-US')}</span>
+					{' vote' + (comment.score === 1 ? '' : 's')}
+				{:else}
+					[votes hidden]
+				{/if}
 			</a>
 		</h2>
 		{#if collapsed}

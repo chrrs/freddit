@@ -12,7 +12,11 @@ export interface Post {
 	content: PostContent;
 
 	author?: Author;
-	subreddit: string;
+	subreddit: {
+		name: string;
+		prefixed: string;
+		type: 'subreddit' | 'user';
+	};
 	timestamp: number;
 
 	nsfw: boolean;
@@ -72,7 +76,11 @@ export function extractPost($: CheerioAPI, el: Element): Post {
 					),
 			  }
 			: undefined,
-		subreddit: thing.attr('data-subreddit') ?? '[unknown]',
+		subreddit: {
+			name: thing.attr('data-subreddit') ?? '[unknown]',
+			prefixed: thing.attr('data-subreddit-prefixed') ?? 'r/[unknown]',
+			type: thing.attr('data-subreddit-type') === 'user' ? 'user' : 'subreddit',
+		},
 		timestamp: Number(thing.attr('data-timestamp')),
 
 		nsfw: thing.attr('data-nsfw') === 'true',

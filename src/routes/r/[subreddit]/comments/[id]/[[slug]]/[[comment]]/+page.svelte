@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-	<title>{data.post.title} - r/{data.post.subreddit} - Freddit</title>
+	<title>{data.post.title} - {data.post.subreddit.prefixed} - Freddit</title>
 </svelte:head>
 
 <div class="container">

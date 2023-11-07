@@ -19,24 +19,33 @@
 			{#if post.spoiler}
 				<span class="spoiler">SPOILER</span>
 			{/if}
+
 			{#if post.nsfw}
 				<span class="nsfw">NSFW</span>
 			{/if}
+
 			{#if showSubreddit}
-				<a class="subreddit" href={`/r/${post.subreddit}`}>
-					r/{post.subreddit}
+				<a class="subreddit" href={`/r/${post.subreddit.name}`}>
+					{post.subreddit.prefixed}
 				</a>
 			{/if}
+
 			<span title={formatRFC7231(post.timestamp)}>
 				{formatDistanceToNowStrict(post.timestamp, { addSuffix: true })}
 			</span>
-			{' • '}
-			<AuthorName author={post.author} />
+
+			{#if post.subreddit.type !== 'user'}
+				{' • '}
+				<AuthorName author={post.author} />
+			{/if}
+
 			{' • '}
 			<a href={post.commentsUrl}>{post.comments.toLocaleString('en-US')} comments</a>
+
 			{' • '}
 			<span>{post.domain}</span>
 		</h2>
+
 		<a class="title" href={post.commentsUrl}>
 			{#if post.flair}
 				<span class="flair">{post.flair}</span>
